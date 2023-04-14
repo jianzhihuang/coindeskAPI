@@ -1,12 +1,14 @@
 # coindeskAPI
 
 #Java:8
+
 #資料庫:H2 Spring Data JPA
+
 #功能簡述:
 #1. 呼叫 coindesk API,解析其下行內容與資料轉換,並實作新的 API。
-#coindesk API:https://api.coindesk.com/v1/bpi/currentprice.json
+coindesk API:https://api.coindesk.com/v1/bpi/currentprice.json
 #2. 建立一張幣別與其對應中文名稱的資料表(需附建立 SQL 語法),並提
-#供 查詢 / 新增 / 修改 / 刪除 功能 API。
+供 查詢 / 新增 / 修改 / 刪除 功能 API。
 #實作內容:
 #1. 幣別 DB 維護功能。
 #2. 呼叫 coindesk 的 API。
