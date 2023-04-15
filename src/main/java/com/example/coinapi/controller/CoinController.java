@@ -72,8 +72,8 @@ public class CoinController {
 
 
 
-    @GetMapping("/CallCoindeskAPI")
-    public ResponseEntity<Map<String,Object>> CallCoindesk() {
+    @GetMapping("/DataConversionCoindeskAPI")
+    public ResponseEntity<Map<String,Object>> dataConversionCoindeskAPI() {
         String url = "https://api.coindesk.com/v1/bpi/currentprice.json";
         time = calledAPIHandler.handler(url).getTime();
         Map<String,Object> result = new HashMap<>();
@@ -86,6 +86,20 @@ public class CoinController {
 
        Bpi bpi = calledAPIHandler.handler(url).getBpi();
         result.put("bpi",coinListHandler.transfer(bpi));
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+    @GetMapping("/CallTheCoindeskAPI")
+    public ResponseEntity<Map<String,Object>> callTheCoindeskAPI() {
+        String url = "https://api.coindesk.com/v1/bpi/currentprice.json";
+        time = calledAPIHandler.handler(url).getTime();
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> timeResult = new TreeMap<>();
+        timeResult.put("updated",time.getUpdated());
+        timeResult.put("updatedISO",time.getUpdatedISO());
+        timeResult.put("updateduk",time.getUpdateduk());
+        result.put("time",timeResult);
+        Bpi bpi = calledAPIHandler.handler(url).getBpi();
+        result.put("bpi",bpi);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

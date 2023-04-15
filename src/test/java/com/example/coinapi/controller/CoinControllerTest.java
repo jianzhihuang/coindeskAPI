@@ -1,9 +1,5 @@
 package com.example.coinapi.controller;
 
-import com.example.coinapi.coindeskAPI.CalledAPIHandler;
-import com.example.coinapi.coindeskAPI.ResultAPI;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,6 +23,8 @@ class CoinControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+
 
     //測試呼叫查詢幣別對應表資料 API,並顯示其內容。
     @Test
@@ -54,6 +52,7 @@ class CoinControllerTest {
                         "\"description\": \"United States Dollar\",\n" +
                         "\"rate_float\": 21606.7412\n" +
                         "}");
+        ;
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is(201))
@@ -96,24 +95,26 @@ class CoinControllerTest {
 
     //測試呼叫 coindesk API,並顯示其內容。
     @Test
-    void handler() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String url = "https://api.coindesk.com/v1/bpi/currentprice.json";
-        ResultAPI resultAPI = CalledAPIHandler.getInstance().getForObject(url, ResultAPI.class);
-        System.out.println(objectMapper.writeValueAsString(resultAPI));
-        assertNotNull(resultAPI);
+    void callTheCoindeskAPI() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.get("/CallTheCoindeskAPI").accept(MediaType.APPLICATION_JSON);
+            mockMvc.perform(request)
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.time").exists())
+                    .andExpect(jsonPath("$.bpi").exists())
+                    .andExpect(jsonPath("$.bpi.usd").exists())
+                    .andExpect(jsonPath("$.bpi.gbp").exists())
+                    .andExpect(jsonPath("$.bpi.eur").exists())
+                    .andDo(print());
 
     }
-
     //測試呼叫資料轉換的 API,並顯示其內容。
     @Test
     void dataConversionCoindeskAPI() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/CallCoindeskAPI");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/DataConversionCoindeskAPI");
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.bpi.EUR.幣別", equalTo("EUR")))
                 .andReturn();
     }
-
 }
