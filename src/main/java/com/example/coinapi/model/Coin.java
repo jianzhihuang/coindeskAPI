@@ -1,7 +1,6 @@
 package com.example.coinapi.model;
 
 
-import jdk.nashorn.internal.runtime.Debug;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.stereotype.Component;
