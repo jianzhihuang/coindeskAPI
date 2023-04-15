@@ -1,6 +1,7 @@
 package com.example.coinapi.model;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ public class Coin{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
     private String code;
     private String symbol;
