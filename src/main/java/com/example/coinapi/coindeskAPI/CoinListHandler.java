@@ -21,18 +21,25 @@ public class CoinListHandler {
     }
 
     public Map<String ,String> coinHandler(Coin coin){
-        Map<String ,String> map= new TreeMap<>();
-        if("USD".equals(coin.getCode())){
-                map.put("幣別中文名稱","美金");
-                map.put("幣別",coin.getCode());
-        }else if("GBP".equals(coin.getCode())){
-                map.put("幣別中文名稱","英鎊");
-                map.put("幣別",coin.getCode());
-        }else if("EUR".equals(coin.getCode())){
-                map.put("幣別中文名稱","歐元");
-                map.put("幣別",coin.getCode());
+        Map<String, String> map = new TreeMap<>();
+        String currencyName = getCurrencyName(coin.getCode());
+        if (currencyName != null) {
+            map.put("幣別中文名稱", currencyName);
+            map.put("幣別", coin.getCode());
         }
         map.put("匯率", coin.getRate());
         return map;
+    }
+    private String getCurrencyName(String code) {
+        switch (code) {
+            case "USD":
+                return "美金";
+            case "GBP":
+                return "英鎊";
+            case "EUR":
+                return "歐元";
+            default:
+                return null;
+        }
     }
 }

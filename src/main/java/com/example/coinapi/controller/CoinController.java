@@ -55,7 +55,7 @@ public class CoinController {
             coin.setId(id);
             return ResponseEntity.status(HttpStatus.CREATED).body(coinService.updateCoin(coin));
         }else{
-            return ResponseEntity.status(HttpStatus.CONFLICT    ).body(null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
 
@@ -64,9 +64,9 @@ public class CoinController {
     public ResponseEntity<?> deleteCoin(@PathVariable Long id){
         if(coinService.findById(id)!=null){
             coinService.deleteCoin(id);
-            return ResponseEntity.status(204).body(null);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }else {
-            return ResponseEntity.status(404).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 

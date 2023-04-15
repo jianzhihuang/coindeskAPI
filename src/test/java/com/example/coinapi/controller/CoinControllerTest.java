@@ -1,6 +1,6 @@
 package com.example.coinapi.controller;
 
-import com.example.coinapi.coindeskAPI.RestTemplateUtil;
+import com.example.coinapi.coindeskAPI.CalledAPIHandler;
 import com.example.coinapi.coindeskAPI.ResultAPI;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +27,7 @@ class CoinControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     //測試呼叫查詢幣別對應表資料 API,並顯示其內容。
     @Test
     void queryCoins() throws Exception {
@@ -35,9 +36,10 @@ class CoinControllerTest {
                 .andDo(print())
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].code",equalTo("USD")))
+                .andExpect(jsonPath("$[0].code", equalTo("USD")))
                 .andReturn();
     }
+
     //測試呼叫新增幣別對應表資料 API。
     @Transactional
     @Test
@@ -55,8 +57,8 @@ class CoinControllerTest {
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is(201))
-                .andExpect(jsonPath("$.code",equalTo("UBD")))
-                .andExpect(jsonPath("$.id",equalTo(2)));
+                .andExpect(jsonPath("$.code", equalTo("UBD")))
+                .andExpect(jsonPath("$.id", equalTo(2)));
     }
 
     //測試呼叫更新幣別對應表資料 API,並顯示其內容。
@@ -64,7 +66,7 @@ class CoinControllerTest {
     @Test
     void updateCoin() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .put("/updateCoin/{id}",1)
+                .put("/updateCoin/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "\"code\": \"UAB\",\n" +
@@ -76,31 +78,33 @@ class CoinControllerTest {
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is(201))
-                .andExpect(jsonPath("$.code",equalTo("UAB")))
+                .andExpect(jsonPath("$.code", equalTo("UAB")))
                 .andReturn();
     }
+
     //測試呼叫刪除幣別對應表資料 API。
     @Transactional
     @Test
     void deleteCoin() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .delete("/deleteCoin/{id}",1);
+                .delete("/deleteCoin/{id}", 1);
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is(204))
                 .andReturn();
     }
+
     //測試呼叫 coindesk API,並顯示其內容。
     @Test
     void handler() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        RestTemplateUtil restTemplateUtil = new RestTemplateUtil();
         String url = "https://api.coindesk.com/v1/bpi/currentprice.json";
-        ResultAPI resultAPI =restTemplateUtil.getInstance().getForObject(url,ResultAPI.class);
-        System.out.println( objectMapper.writeValueAsString(resultAPI));
+        ResultAPI resultAPI = CalledAPIHandler.getInstance().getForObject(url, ResultAPI.class);
+        System.out.println(objectMapper.writeValueAsString(resultAPI));
         assertNotNull(resultAPI);
 
     }
+
     //測試呼叫資料轉換的 API,並顯示其內容。
     @Test
     void dataConversionCoindeskAPI() throws Exception {
@@ -108,7 +112,7 @@ class CoinControllerTest {
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("$.bpi.EUR.幣別",equalTo("EUR")))
+                .andExpect(jsonPath("$.bpi.EUR.幣別", equalTo("EUR")))
                 .andReturn();
     }
 

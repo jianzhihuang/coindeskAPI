@@ -1,14 +1,15 @@
-package com.example.coinapi.service;
+package com.example.coinapi.service.Imp;
 
 import com.example.coinapi.model.Coin;
 import com.example.coinapi.model.CoinDao;
+import com.example.coinapi.service.CoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class CoinServiceImp implements CoinService{
+public class CoinServiceImp implements CoinService {
     @Autowired
     private CoinDao coinDao;
 
